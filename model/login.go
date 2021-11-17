@@ -1,9 +1,11 @@
 package model
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/jinzhu/gorm"
+)
 
-func Login(r *gin.Engine, middleware func() gin.HandlerFunc) {
-	r.GET("/login", middleware(), func(context *gin.Context) {
-		context.JSON(200, gin.H{"msg": "登录中。。"})
-	})
+type LoginModel struct {
+	gorm.Model
+	Username string `form:"username" json:"username" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
 }

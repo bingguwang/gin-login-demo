@@ -2,15 +2,26 @@ package model
 
 import (
 	"fmt"
-	"gin-login-demo/Utils"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func UserGet(r *gin.Engine) {
-	r.GET("/user", func(context *gin.Context) {
-		//token,_ := context.Get("token") //这样是取不到token的，因为loginware中间件没作用在此路由上，context不是同一个
-		token := Utils.Token
-		fmt.Println(token)
-		context.JSON(200, gin.H{"token": token, "msg": "users"})
+// User demo,要返回的用户信息
+type UserResp struct {
+	UserName string
+	Age      int
+}
+
+func GetUserInfo(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	fmt.Println(claims)
+	userName := claims["id"].(string)
+	data := UserResp{UserName: userName}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": "success",
+		"msg":  "登录成功",
+		"data": data,
 	})
 }
