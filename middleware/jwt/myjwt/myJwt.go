@@ -91,6 +91,14 @@ func GetGinJWTMiddleware(myAutorizator authorizator.MyAutorizator) (*jwt.GinJWTM
 
 		// TokenHeadName is a string in the header. Default value is "Bearer"
 		TokenHeadName: "Bearer", //token在请求头时的名称，默认值为Bearer
+		/*
+				在调用这个方法ParseToken解析请求中的token时候，会调用jwtFromHeader，
+				这个方法会根据空格把token拆成2部分，第一部分就是tokenHeadName,会与这里设置的TokenHeadName比较，不一样就返回错误\
+				所以前端需要知道这个TokenHeadName，在携带的时候把这个加在token前才能成功token验证
+
+			所以感觉这样直接用jwt.GinJWTMiddleware还是有局限性的，尝试过重写生成token的方法，太鸡肋了，
+			所以还是自己实现生成token比较好！！！！
+		*/
 
 		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
 		TimeFunc: time.Now, //测试或服务器在其他时区可设置该属性，默认值为time.Now
